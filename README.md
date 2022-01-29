@@ -35,6 +35,7 @@ You can clone this repo as is, and it will run, so long as you have loaded the d
 - [Step 0 - Quick and Dirty Task 1 Setup](#step-0---quick-and-dirty-task-1-setup)
   - [Creating Your Directory](#creating-your-directory)
   - [Creating Your app.py](#creating-your-app.py)
+  - [Filling your Database](#filling-your-database)
   - [Hosting on Flip Servers and Running Forever (via Gunicorn)](#hosting-on-flip-servers-and-running-forever-via-gunicorn)
 - [Step 1 - Get The Tools Downloaded You Will Need](#step-1---get-the-tools-downloaded-you-will-need)
   - [Text Editior](#text-editior)
