@@ -19,6 +19,8 @@ This guide is based off of the work previously done by prior TA and student, @ml
 
 Dr. Curry and Prof. Safonte for allowing me the time to build the guide and project for other students to benefit from.
 
+Step 0 and Step 7 sections added by TA Andrew Kamand.
+
 ## Clone and Go
 
 You can clone this repo as is, and it will run, so long as you have loaded the data from `/database/bsg_db.sql` to a properly configured MySQL database which is running, have a propertly configured `.env` file in the root of your project (same folder as `app.py`). You will also need to install the dependencies in `requirements.txt`.
@@ -30,6 +32,10 @@ You can clone this repo as is, and it will run, so long as you have loaded the d
   - [Clone and Go](#clone-and-go)
 - [Table of Contents](#table-of-contents)
 - [Setup](#setup)
+- [Step 0 - Quick and Dirty Task 1 Setup](#step-0---quick-and-dirty-task-1-setup)
+  - [Creating Your Directory](#creating-your-directory)
+  - [Creating Your app.py](#creating-your-app.py)
+  - [Hosting on Flip Servers and Running Forever (via Gunicorn)](#hosting-on-flip-servers-and-running-forever-via-gunicorn)
 - [Step 1 - Get The Tools Downloaded You Will Need](#step-1---get-the-tools-downloaded-you-will-need)
   - [Text Editior](#text-editior)
   - [Database Engine](#database-engine)
@@ -176,7 +182,7 @@ SELECT * FROM diagnostic;
 
 ![step12 command](./doc_img_step0/step12.png)
 
-## Hosting on Flip Servers and Running Forever (via Gunicorn)
+## Hosting on Flip Servers and Running Forever via Gunicorn
 
 13) Ok, back to app.py and VScode. Run "pip3 install gunicorn" via the Terminal.
 
