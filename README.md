@@ -74,11 +74,133 @@ You can clone this repo as is, and it will run, so long as you have loaded the d
 
 Preparation is key with any project, especially a portfolio project. You want to show prospective employers that you can not only be productive but also work efficiently. Preparation will also make your project flow smoothly as well as let you pinpoint the area where bugs are occuring with ease. Read on, and we will go throug a step-by-step guide on getting setup to run your first Flask project.
 
+# Step 0 - Quick and Dirty Task 1 Setup
+
+You ever get frustrated during a lengthy tutorial; run into a small error that came out of left field? Spend hours backtracking, scrambling, tinkering, and wondering where you might have gone wrong? Sometimes you just want to hit the ground running, and want to get right to it, taking shortcuts to get there. Well, if you want the bare minimum, quick and dirty, step by step on how to get up a basic flask app up and running for Task 1 and CS340 -- this section is for you. It's not elegant, it's not in depth, it doesn't dive into the details, but it gets you started. 
+
+The rest of the guide is very professional, informative, and detailed, filling in all the context that this step skips. Hence, I still recommend looking through the rest of the guide. It will be helpful to most students in the long run to continue on, read, process, and digest the rest of the guide to fill in some of the gaps in knowledge in processes and practices that step 0 zooms past. Later steps also delve further into critical tools like virtual environments, templating, git, SQL queries, and gunicorn (essentially flask's version of 'forever'). 
+
+But without further ado, here's the quick and dirty start-up:
+
+## Creating Your Directory
+
+1) Create a new folder for task 1 in your Flip directory (can be in a CS340 folder if you desire), name it as you like, let's start from scratch.
+
+![step1 command](./doc_img_step0/step1.png)
+
+2) Using the terminal, make sure you "cd X" into that folder, with X being the folder name.
+
+![step2 command](./doc_img_step0/step2.png)
+
+3) Run "pip3 install --user virtualenv"
+
+![step3 command](./doc_img_step0/step3.png)
+
+4) Run "python3 -m ./venv ." (the period . is part of the command, don’t forget it!).
+
+![step4 command](./doc_img_step0/step4.png)
+
+5) Run "source ./bin/activate", afterwards you should see (yourfoldername) flipX in the terminal which means we are successfully in the virtual environment.
+
+![step5 command](./doc_img_step0/step5.png)
+
+6) After that, run "pip3 install flask-mysqldb", don’t worry about updating pip or whatever it prompts you with – ignore that.
+
+![step6 command](./doc_img_step0/step6.png)
+
+## Creating Your app.py
+
+7) Create a file named "app.py".
+
+![step7 command](./doc_img_step0/step7.png)
+
+8) Populate that file with this code (don’t forget to save after):
+
+```
+from flask import Flask, render_template, json, redirect
+from flask_mysqldb import MySQL
+from flask import request
+import os
+
+app = Flask(__name__)
+
+app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
+app.config['MYSQL_USER'] = 'cs340_UserName'
+app.config['MYSQL_PASSWORD'] = 'xxxx' #last 4 of onid
+app.config['MYSQL_DB'] = 'cs340_UserName'
+app.config['MYSQL_CURSORCLASS'] = "DictCursor"
+
+
+mysql = MySQL(app)
+
+
+# Routes
+@app.route('/')
+def root():
+    query = "SELECT * FROM diagnostic;"
+    cur = mysql.connection.cursor()
+    cur.execute(query)
+    results = cur.fetchall()
+
+    return results[0]
+
+
+# Listener
+if __name__ == "__main__":
+
+    #Start the app on port 3000, it will be different once hosted
+    app.run(port=3000, debug=True)
+```
+
+9) Towards the top of the app.py where we have 5 lines dedicated to your database credentials, make sure to fill that in. Change 'CS340_name' to your OSU account name, so in my case that would be 'CS340_kamanda'. Replace 'XXXX' with the last 4 digits of your OSU id.
+
+![step9 command](./doc_img_step0/step9.png)
+
+10) Change the port at the bottom to any port of your choosing (some ports might be taken, just choose a large number)
+
+![step10 command](./doc_img_step0/step10.png)
+
+## Filling your Database
+
+11) (Ignore this step if you already completed the query portion of task 1) If you haven't done so already, pivot for a moment and log in to your school provided database via phpmyadmin (https://classmysql.engr.oregonstate.edu/index.php). Note that you can also accomplish the above steps 11-12 via the terminal or the webapp itself if you desire, but I find it's good practice to familiarize yourself with the phpmyadmin UI early, it's a great tool!
+
+![step11 command](./doc_img_step0/step11.png)
+
+12) (Ignore this step if you already completed the query portion of task 1) Execute the queries below in the SQL tab of phpmyadmin after importing the bsg_db.sql file in order to create a diagnostic table (as outlined in the module linked in step 10). These are the 4 lines of code, input them in the SQL tab and hit ‘Go’ (see screenshot below):
+```
+DROP TABLE IF EXISTS diagnostic;
+CREATE TABLE diagnostic(id INT PRIMARY KEY, text VARCHAR(255) NOT NULL);
+INSERT INTO diagnostic (text) VALUES ("MySQL is working");
+SELECT * FROM diagnostic;
+```
+
+![step12 command](./doc_img_step0/step12.png)
+
+## Hosting on Flip Servers and Running Forever (via Gunicorn)
+
+13) Ok, back to app.py and VScode. Run "pip3 install gunicorn" via the Terminal.
+
+![step13 command](./doc_img_step0/step13.png)
+
+14) Run "gunicorn -b 0.0.0.0:XXXXX -D app:app" replacing 'XXXXX' with your desired port number.
+
+![step14 command](./doc_img_step0/step14.png)
+
+15). Navigate to your web app address, i.e. http://flipX.engr.oregonstate.edu:XXXXX/ with the first 'X' being your flip server (1-3), and XXXXX being your port number.
+
+![step15 command](./doc_img_step0/step15.png)
+
+16) Should you need to restart the web app after making changes, run "pkill -u yourOSUAccountName gunicorn" replacing yourOSUid (i.e. for me it would be kamanda) and restart by running the command in step 14). Note that the pkill command will kill all of your flip gunicorn processes.
+
+![step16 command](./doc_img_step0/step16.png)
+
+17) Hopefully that was easy to understand and that you now have a basic functioning flask webapp. Feel free to tinker around now and add templating and the like (there is a section on templating and other good notes further into the guide)! Again, I can’t stress this enough – if you want further context and detail, please do read on through the main body of the flask guide. It's well articulated with the reasoning behind many of these steps, written by the wonderful TA Greg Kochera for past terms! This section is just a fast track to kickstarting a basic app as students in the past have gotten lost or had issues with some of the greater detail in the rest of the guide, but it definitely still contains valuable information.
+
 # Step 1 - Get The Tools Downloaded You Will Need
 
 You are going to need a few things get going here.
 
-## Text Editior
+## Text Editor
 
 Text Editors are like clothes. Everyone has their preferences. I prefer VS Code so this guide will be built using that editor. You can use what you please. Atom, Sublime, Notepad, Vim, eMacs or even Notepad are completely acceptable. We just need to be able to edit our code.
 
