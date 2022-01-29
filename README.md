@@ -163,7 +163,7 @@ if __name__ == "__main__":
 
 ![step9 command](./doc_img_step0/step9.png)
 
-10) Change the port at the bottom to any port of your choosing (some ports might be taken, just choose a large number)
+10) Change the port at the bottom to any port of your choosing (some ports might be taken, just choose a large number but not too large, there is a ceiling number on the flip servers)
 
 ![step10 command](./doc_img_step0/step10.png)
 
