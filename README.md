@@ -186,7 +186,7 @@ SELECT * FROM diagnostic;
 
 ![step14 command](./doc_img_step0/step14.png)
 
-15). Navigate to your web app address, i.e. http://flipX.engr.oregonstate.edu:XXXXX/ with the first 'X' being your flip server (1-3), and XXXXX being your port number.
+15) Navigate to your web app address, i.e. http://flipX.engr.oregonstate.edu:XXXXX/ with the first 'X' being your flip server (1-3), and XXXXX being your port number.
 
 ![step15 command](./doc_img_step0/step15.png)
 
