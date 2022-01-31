@@ -965,11 +965,11 @@ In this section, we’re going to go over our “POST” method in our /people r
 
 ![POST people](doc_img_step7/image8.png)
 
-We want to grab data form data when the user hits the ‘Add Person’ button on our web page, identified with ‘Add_person’ in our HTML code. We grab fname, lname, homeworld, and age from each of the corresponding form labels. Now unfortunately, unlike our READ functionality we can’t simply rev up a query and execute it. We need to adjust our query based on the presence of NULL-able attributes. In the case of our bsg_people database, both homeworld and age can potentially be null. So how do we account for these cases? If statements.
+We want to grab data from form inputs when the user hits the ‘Add Person’ button on our web page, identified with ‘Add_Person’ in our HTML code. We grab fname, lname, homeworld, and age from each of the corresponding form labels. Now unfortunately, unlike our READ functionality we can’t simply rev up a query and execute it. We need to adjust our query based on the presence of NULL-able attributes. In the case of our bsg_people database, both homeworld and age can potentially be null. So how do we account for these cases? If statements. A homeworld value of '0' or an empty input in age correspond to null inputs.
 
 ![people null](doc_img_step7/image9.png)
 
-I know this is a large code block, but it’s a lot simpler than the length implies. We have 4 cases: null homeworld and null age, null homeworld, null age, and 0 null inputs. So we account for these with 4 if statements and thus, 4 separate queries. The syntax of our query is somewhat similar to our SELECT query from earlier, but this time we want to insert data, not select it, hence the INSERT. We are inserting into bsg_people and our database via the original SQL import file is set up to insert NULL by default if no input is given. So you can see our queries underneath null statements are leaving out ‘age’ or ‘homeworld’ or both.
+I know this is a large code block, but it’s a lot simpler than the length implies. We have 4 cases: null homeworld and null age, null homeworld, null age, or 0 null inputs. So we account for these with 4 if statements and thus, 4 separate queries. The syntax of our query is somewhat similar to our SELECT query from earlier, but this time we want to insert data, not select it, hence the INSERT. We are inserting into bsg_people and our database via the original SQL import file is set up to insert NULL by default if no input is given. So you can see our queries underneath null statements are leaving out ‘age’ or ‘homeworld’ or both.
 
 ![people redirect](doc_img_step7/image10.png)
 
@@ -981,11 +981,13 @@ Our delete implementation is really quite simple relative to our insert. We need
 
 ![delete button](doc_img_step7/image11.png)
 
-For our href link tied to each delete button, we purposely set each link to route to /delete_people/item.id, effectively passing the ‘id’ of the person we want to delete with the route itself so we can access it easily in our app.py. When a user clicks a delete button, it routes to our delete_people page with the id of the person in the associated row entry. So for example, if we click the delete button on row 1 of our table with say “William Adama - id 1”, our click routes us to /delete_people/1 . Now let’s get back to our app.py and create that delete route.
+For our href link tied to each delete button, we purposely set each link to route to /delete_people/item.id, effectively passing the ‘id’ of the person we want to delete with the route itself so we can access it easily in our app.py. When a user clicks a delete button, it routes to our delete_people page with the id of the person in the associated row entry. So for example, if we click the delete button on row 1 of our table with say “William Adama - id 1”, our click routes us to /delete_people/1 . Now let’s get back to our app.py and create that delete route with this information in mind.
 
 ![delete route](doc_img_step7/image12.png)
 
-So as you can see at the top, our delete button link matches our app delete route. Our delete_people function just below is passed that ‘id’ variable directly from the route. We utilize a DELETE query, and we want to delete from bsg_people of the person with the associated id. After executing our query, similar to our past code blocks, we route back to /people. You should be picking up the pattern here now. Route, method (if applicable), grab form inputs (if applicable), create desired query, execute desired query, load page.
+So as you can see at the top, our delete button link matches our app delete route. Our delete_people function just below is passed that ‘id’ variable directly from the route. We utilize a DELETE query, and we want to delete from bsg_people the person with the associated id. After executing our query, similar to our past code blocks, we route back to /people. Note that we never render a template akin to our /people route. We simply redirect back to /people. So while the /delete_people route exists, it never actually loads a page to display to the user, it all executes behind the scenes when the user clicks 'delete' and then immediately redirects them back to /people. 
+
+You should be picking up the overall pattern here after two functionalities. Create route, set method (if applicable), grab form inputs (if applicable), create desired query, execute desired query, load page.
 
 ## Update/Edit
 
@@ -1003,7 +1005,9 @@ Next, we need to code our POST method for actually updating the information of t
 
 ![edit POST](doc_img_step7/image15.png)
 
-Look familiar? It’s a near carbon copy of how we kicked off our /people POST for our insert functionality. Grab the Edit_Person form (name of the inputs form in our edit_people html template), grab each of our attributes from their respective forms. Now you might be wondering, well there’s no ‘id’ form is there? The user never inputs an ‘id’! Well, we passed the id to our route, then in our HTML template, we created a hidden form that holds that ‘id’ value for the express purpose of utilizing it in our ‘POST’ method. You might also be wondering, why do we have to store that id in the first place, I thought we passed it to the route? We did, but that id is lost when our ‘GET’ method fires up and renders the template, so to circumvent that, we passed that id to the template via our earlier SELECT query, through our ‘data’ object, and then stored it in a form (named “personID”) that is marked as ‘hidden’ so it doesn’t appear on the user’s end. All of that to grab it here :)!
+Look familiar? It’s a near carbon copy of how we kicked off our /people POST for our insert functionality. Grab the Edit_Person form (name of the inputs form in our edit_people html template), grab each of our attributes from their respective forms. Now you might be wondering, well there’s no ‘id’ form is there? The user never inputs an ‘id’! Well, we passed the id to our route, then in our HTML template, we created a hidden form that holds that ‘id’ value for the express purpose of utilizing it in our ‘POST’ method. 
+
+You might also be wondering, why do we have to store that id in the first place, I thought we passed it to the route? We did, but that id is lost when our ‘GET’ method fires up and renders the template, so to circumvent that, we passed that id to the template via our earlier SELECT query, through our ‘data’ object, and then stored it in a form (named “personID”) that is marked as ‘hidden’ so it doesn’t appear on the user’s end. Passed to route --> sent through GET render_template --> stored in a hidden HTML form in edit_people.j2 --> accessed in 'POST' by grabbing it from that 'personID' form --> utilized in delete query.
 
 Now, exactly like with our INSERT form, we need to account for the potential of null homeworld and/or age inputs:
 
@@ -1013,7 +1017,7 @@ This code should once again look familiar as it’s a near copy of the INSERT fo
 
 ## Suggested Student Exercise
 
-So voila, we now have a small, complete CRUD app for one entity in our bsg database, bsg_people. As a practice exercise, I encourage you to create a template named bsg_planets and fulfill CRUD elements for that page, representing the bsg_planets entity in our database. If there were any points of confusion during this tutorial, I implore you to load up the full code and walk through both the HTML and the app.py, reading through the comments to understand what’s happening and how they interconnect. You should be fairly familiar with how to create a basic HTML page from CS 290, but again, you may want to brush up on your knowledge.
+So voila, we now have a small, complete CRUD app for one entity in our bsg database, bsg_people. As a practice exercise, I encourage you to create a template named bsg_planets and fulfill CRUD elements for that page in app.py, representing the bsg_planets entity in our database similar to what we did with bsg_people. If there were any points of confusion during this tutorial, I implore you to load up the full code and walk through both the HTML and the app.py, reading through the comments to understand what’s happening and how they interconnect. You should be fairly familiar with how to create a basic HTML page from CS 290, but again, you may want to brush up on your knowledge.
 
 # Conclusion
 
