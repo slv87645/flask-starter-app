@@ -927,11 +927,11 @@ This will be the final front-end result of our HTML in people.j2:
 
 ![front-end](doc_img_step7/image2.png)
 
-Upon clicking one of the edit buttons:
+Upon clicking one of the edit buttons, we'll route to our edit_people.j2 page:
 
 ![edit page](doc_img_step7/image3.png)
 
-Alright, now let’s jump into the meat and potatoes of establishing creating our routes and executing queries in our app.py file to fulfill our CRUD functionalities.
+Alright, now let’s jump to the meat and potatoes of creating our routes and executing queries in our app.py file to fulfill our desired CRUD functionalities.
 
 ## Read
 
