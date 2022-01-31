@@ -61,6 +61,13 @@ You can clone this repo as is, and it will run, so long as you have loaded the d
   - [Connecting the Database to Our App](#connecting-the-database-to-our-app)
 - [Step 6 - Adding Queries to Your App and Displaying Data](#step-6---adding-queries-to-your-app-and-displaying-data)
   - [Running a Query](#running-a-query)
+- [Step 7 - Building a Basic CRUD App](#step-7---building-a-basic-crud-)
+  - [Our Initial Data, Templates, and HTML](#our-initial-data,-templates,-and-html)
+  - [Read](#read)
+  - [Create](#create)
+  - [Delete](#delete)
+  - [Update/Edit](#update/edit)
+  - [Suggested Student Exercise](#suggested-student-exercise)
 - [Conclusion](#conclusion)
 - [Extra Bits](#extra-bits)
   - [Gunicorn](#gunicorn)
@@ -902,6 +909,111 @@ def bsg_people():
 Everything should be in order now, restart your server if necessary and navigate to `\bsg-people` in your browser to verify.
 
 ![bsg_people query displayed in table on browser](doc_img/flask_bsg_people_table.png)
+
+# Step 7 - Building a Basic CRUD APP
+
+In this section, we’re going to go over the code for a basic CRUD (create, read, update, and delete) App using SQL data in the folder bsg_people_app which also contains the code for the completed App if you want to follow along or peruse at your leisure. For the purposes of this section, I’m going to assume you have a good handle on basic HTML coming from CS290. The HTML templates are fairly intuitive and also commented thoroughly; however, if you need to brush up on your HTML, there are many good web tutorials and resources.
+
+## Our Initial Data, Templates, and HTML
+
+Our initial SQL data to fill our database is contained in bsg_universe.sql, a file within our bsg_people_app folder. You can load up this data through phpmyadmin similar to what we did in Steps 11-13 of Step 0 at the top of this guide. Except this time instead of running a few queries, we want to navigate over to the import tab and select bsg_universe.sql from our PC to initialize our bsg database. Our database contains several entities like bsg_people and bsg_planets, but for the purposes of this brief tutorial, we are only creating a web page to represent bsg_people.
+
+As stated earlier, I’m going to assume you have basic knowledge of HTML from 290, so I’m going to skip going over the HTML line by line. Earlier in this guide, we covered templating. For the purposes of this basic app, we are going to create two templates named people.j2 and edit_people.j2 and fill them with basic HTML, displaying a table of data along with buttons and forms allowing a user to add a new person to bsg_people or edit/delete an existing person.
+
+![templates image](doc_img_step7/image1.png)
+
+Earlier in this guide in Step 4, we went over how to access the list of dictionaries filled with some data from bsg_people and bsg_planets that we will pass from our app.py (you’ll see how this is created, stored, and passed later in this guide, stay tuned!). We access these dictionaries to fill our table, and populate elements of dropdown menus. So be sure to go back and refresh on that section if needed!
+This will be the final front-end result of our HTML in people.j2:
+
+![front-end](doc_img_step7/image2.png)
+
+Upon clicking one of the edit buttons:
+
+![edit page](doc_img_step7/image3.png)
+
+Alright, now let’s jump into the meat and potatoes of establishing creating our routes and executing queries in our app.py file to fulfill our CRUD functionalities.
+
+## Read
+
+Before we formally begin with any functionality implementation, first we must fill in our database credentials in our app.py. If you recall from step 0, our app.py had a section at the top that looked something like this:
+
+![database credentials](doc_img_step0/step9.png)
+
+Make sure that information is properly filled out with user/db = ‘cs340_OSUusername’ and the ‘XXXX’ under password being the last 4 digits of your OSU id. This is the information of your school provided database, with the same credentials you use to login to phpmyadmin over at https://classmysql.engr.oregonstate.edu/index.php to manage your database, as explained in step 0 of this guide.
+
+With that out of the way, let’s jump right in and begin by first tackling our read functionality by creating a table to view entries in the bsg_people entity. First, we need to create the route for our /people page. You can name the route anything you desire, but “/people” seems fitting for the entity bsg_people.
+
+![people route](doc_img_step7/image4.png)
+
+If you remember basic HTML, you should remember “GET” and “POST” methods, the former is generally used to receive aka GET data, and the latter is generally used to create/update aka POST data. Since we’re starting with our read step, we’re going to want to grab some data, so let’s start with our GET method.
+
+![people GET](doc_img_step7/image5.png)
+
+Let’s break down what’s happening here within our GET method. Our first step is to fire up our query. You’ll learn more about SQL queries later in the course so I’m going to refrain from going into too much detail (like JOINS, you’ll learn about these in a later course module). This is a basic SELECT query used to grab entity data, we’re selecting attributes from bsg_people (id, fname, name, homeworld, and age). Next, we are instantiating a cursor object (part of MySQL) which we will use to connect to our database and execute our query. This is all the data we’ll need to fill in our HTML table. Next, let’s grab some more data from our database to populate our homeworld dropdown form for our insert functionality.
+
+![homeworld query people](doc_img_step7/image6.png)
+
+As you can see, it’s extremely similar to our code above, we’re just executing a different query, this time selecting data from bsg_planets for the purpose of populating our inevitable homeworld form dropdown.
+
+![render people](doc_img_step7/image7.png)
+
+Finally, after we execute our query our final step is to render/display our template. We want to send this data to our people.j2 template, and we can do so via the syntax shown above. This is passing the data in the form of a tuple that contains dictionaries with our queried data, named “data” and “homeworlds.” You’ll notice in your HTML pages that we access this data using ‘{{ }}’ as our signifying syntax and calling elements directly or iterating through our dictionary using a for loop i.e. ‘{{ % for key in data[0].keys() % }}’ will give us our column names for our table. Again, this isn’t a HTML guide, so I encourage you to look over the template code with all the comments, and if further understanding is needed be sure to utilize online resources or ask a TA/Professor during office hours. 
+
+## Create
+
+In this section, we’re going to go over our “POST” method in our /people route to create a new person entry in bsg_people, otherwise known as INSERT functionality.
+
+![POST people](doc_img_step7/image8.png)
+
+We want to grab data form data when the user hits the ‘Add Person’ button on our web page, identified with ‘Add_person’ in our HTML code. We grab fname, lname, homeworld, and age from each of the corresponding form labels. Now unfortunately, unlike our READ functionality we can’t simply rev up a query and execute it. We need to adjust our query based on the presence of NULL-able attributes. In the case of our bsg_people database, both homeworld and age can potentially be null. So how do we account for these cases? If statements.
+
+![people null](doc_img_step7/image9.png)
+
+I know this is a large code block, but it’s a lot simpler than the length implies. We have 4 cases: null homeworld and null age, null homeworld, null age, and 0 null inputs. So we account for these with 4 if statements and thus, 4 separate queries. The syntax of our query is somewhat similar to our SELECT query from earlier, but this time we want to insert data, not select it, hence the INSERT. We are inserting into bsg_people and our database via the original SQL import file is set up to insert NULL by default if no input is given. So you can see our queries underneath null statements are leaving out ‘age’ or ‘homeworld’ or both.
+
+![people redirect](doc_img_step7/image10.png)
+
+Lastly, we redirect back to the /people page after the query executes. We have now implemented our READ and CREATE functionality, two left: delete and update.
+
+## Delete
+
+Our delete implementation is really quite simple relative to our insert. We need to create a separate route for our delete functionality. However, let’s hit pause and take a brief look at our HTML. Remember when we created a delete button for each row of our table?
+
+![delete button](doc_img_step7/image11.png)
+
+For our href link tied to each delete button, we purposely set each link to route to /delete_people/item.id, effectively passing the ‘id’ of the person we want to delete with the route itself so we can access it easily in our app.py. When a user clicks a delete button, it routes to our delete_people page with the id of the person in the associated row entry. So for example, if we click the delete button on row 1 of our table with say “William Adama - id 1”, our click routes us to /delete_people/1 . Now let’s get back to our app.py and create that delete route.
+
+![delete route](doc_img_step7/image12.png)
+
+So as you can see at the top, our delete button link matches our app delete route. Our delete_people function just below is passed that ‘id’ variable directly from the route. We utilize a DELETE query, and we want to delete from bsg_people of the person with the associated id. After executing our query, similar to our past code blocks, we route back to /people. You should be picking up the pattern here now. Route, method (if applicable), grab form inputs (if applicable), create desired query, execute desired query, load page.
+
+## Update/Edit
+
+Now let’s move on to our final piece of CRUD functionality, update (also sometimes called edit). Let’s start by creating our route as we want to route to a new page where a user can fill out a form to update data associated with a person id. Similar to the delete route, we want to pass the ‘id’ of the user we want to edit through the route itself.
+
+![edit route](doc_img_step7/image13.png)
+
+Unlike our delete route which is simply grabbing form inputs, executing a query, and immediately redirecting back to the /people page before actually loading anything, for edit, we need an actual page to load and display for /edit_people as our user needs to fill out a form. Because of this, we require a GET method like we did for our /people page. Inside the GET method, for some quality of life to the user, we’re going to select a slice of bsg_people and display it to the user – more specifically, the person the user is currently editing and their accompanying attributes from bsg_people. So similar to our /people query, we want to execute a SELECT query, but this time instead of selecting all of the people in bsg_people, we are only grabbing the one entry with our passed ‘id’.
+
+![edit select query](doc_img_step7/image14.png)
+
+Similar to our earlier /people route, we need to also grab homeworld data from bsg_planets because our edit form is essentially a copy of our insert form. The user needs to be able to change inputs, so that requires all the same forms, including our homeworld drop down. Once we execute both queries, exactly like we did in our /people route, we render our edit_people template, passing the data gathered, ‘data’ and ‘homeworlds.’ This will allow us to create a mini-table that contains only one row, displaying the information of the person we are currently editing, and to also populate our homeworld dropdown.
+
+Next, we need to code our POST method for actually updating the information of the person that we grabbed.
+
+![edit POST](doc_img_step7/image15.png)
+
+Look familiar? It’s a near carbon copy of how we kicked off our /people POST for our insert functionality. Grab the Edit_Person form (name of the inputs form in our edit_people html template), grab each of our attributes from their respective forms. Now you might be wondering, well there’s no ‘id’ form is there? The user never inputs an ‘id’! Well, we passed the id to our route, then in our HTML template, we created a hidden form that holds that ‘id’ value for the express purpose of utilizing it in our ‘POST’ method. You might also be wondering, why do we have to store that id in the first place, I thought we passed it to the route? We did, but that id is lost when our ‘GET’ method fires up and renders the template, so to circumvent that, we passed that id to the template via our earlier SELECT query, through our ‘data’ object, and then stored it in a form (named “personID”) that is marked as ‘hidden’ so it doesn’t appear on the user’s end. All of that to grab it here :)!
+
+Now, exactly like with our INSERT form, we need to account for the potential of null homeworld and/or age inputs:
+
+![edit null](doc_img_step7/image16.png)
+
+This code should once again look familiar as it’s a near copy of the INSERT form, we handle null inputs in precisely the same manner. The only difference? Our queries. We’re not inserting into bsg_people this time, we are simply updating an already existing person. Hence the UPDATE query as opposed to INSERT. After we execute our UPDATE, we redirect the user back to /people.
+
+## Suggested Student Exercise
+
+So voila, we now have a small, complete CRUD app for one entity in our bsg database, bsg_people. As a practice exercise, I encourage you to create a template named bsg_planets and fulfill CRUD elements for that page, representing the bsg_planets entity in our database. If there were any points of confusion during this tutorial, I implore you to load up the full code and walk through both the HTML and the app.py, reading through the comments to understand what’s happening and how they interconnect. You should be fairly familiar with how to create a basic HTML page from CS 290, but again, you may want to brush up on your knowledge.
 
 # Conclusion
 
