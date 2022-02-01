@@ -2,7 +2,7 @@
 
 This guide is intended for the students in CS 340 who want to take a path through the class using Flask/Python instead of Node.js.
 
-This guide walks through everything from getting the tools setup to work on the app, setting up the infrastructure required to build and run your app, and building and (eventually) deploying the app either to OSU's flip server or Heroku.
+This guide walks through everything from getting the tools setup to work on the app, setting up the infrastructure required to build and run your app on OSU's flip server.
 
 There are a few assumptions that are made when this guide is written:
 
@@ -220,29 +220,19 @@ Text Editors are like clothes. Everyone has their preferences. I prefer VS Code 
 
 ## Database Engine
 
-**MySQL** is the database we will be using in this class. MariaDB and PostgresSQL are other flavors of database engines, but for the purposes of this guide and class, we're going to stick with MySQL. It's acceptable to use MariaDB and PostgresSQL as they are relational databases but just be aware support may be limited from staff and your peers.
+**MySQL** is the database we will be using in this class. It is already installed for you on the flip servers.
 
-[Here](https://dev.mysql.com/downloads/mysql/) is a link to download MySQL Community Edition. Pick the correct operating system you are on, and follow the prompts. It will ask you to login or signup, just skim to the bottom and click "No thanks, just start my download."
-
-MacOS and *nix users can also find their installations here. In case you get lost though here are some resources for installing MySQL on the common OSes.
-
-Mac OSX: https://www.thoughtco.com/installing-mysql-on-mac-2693866
-
-Ubuntu 20.04: https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04
-
-Ubuntu 18.04: https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04
-
-Mint 20.04: https://medium.com/@shivraj.jadhav82/mysql-setup-on-linux-mint-948470115d5
+***Optionally*** you may wish to install a local copy of MySQL on your PC from [here](https://dev.mysql.com/downloads/mysql/) is a link to download MySQL Community Edition. Pick the correct operating system you are on, and follow the prompts. It will ask you to login or signup, just skim to the bottom and click "No thanks, just start my download."
 
 > When setting up your MySQL installation, please make note of what you set the root password to. We will need this later. Keep it safe.
 
 ## Python
 
-Python is the language we will be using to build our Flask application. You can find the downloads for that here.
+Python is the language we will be using to build our Flask application. It is also already installed on the flip servers. We will require Python 3 (or better) for the purposes of this project.
 
-https://www.python.org/downloads/
+***Optionally*** you may wish to install a local copy of MySQL on your PC from [here](https://www.python.org/downloads/)
 
-I won't get to specific here, at this point in the program, you should be familiar with how to install Python (or already have it installed). We will require Python 3 (or better) for the purposes of this project.
+I won't get to specifics, but its fairly straightforward to install Python (if you want to). 
 
 ## Browser
 
@@ -250,13 +240,7 @@ Personally, I am a Firefox user. This guide will be using Firefox, but Chrome is
 
 ## Terminal Application
 
-On Windows, there isn't a native terminal (sort-of). I use Windows Subsystem for Linux 2 (WSL2) which allows Windows to run a native installation of Linux along side Windows. This is remarkably helpful in web application development. If you are a Windows 10 user, I strongly recommend it, since it will let you develop on a native Linux installation without having to dual boot.
-
-> **Windows Users**: Throughout the guide, when I refer to 'Terminal', I am _not_ referring to the command prompt. I will specifically mention 'command prompt' for Windows users if it is necessary.
-
-[Learn How To Install WSL2 on Windows 10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
-
-If you do not want to go the WSL route, I fully understand. You will need to use PuTTY or another Terminal emulator and be familiar with it.
+On Windows, there isn't a native terminal (sort-of). so you will need to use PuTTY, PowerShell or another Terminal emulator and be familiar with it.
 
 On Mac OSX, you already have a Terminal built in. If you open up Spotlight Search (CMD + Space), and type in 'Terminal', it should be the first option.
 
@@ -330,44 +314,30 @@ The short version is that you will be installing a few Python packages to suppor
 Fire up your terminal, navigate to the root of your project folder (the top level of your repo folder):
 
 ```bash
-# On your machine:
-pip3 install virtualenv
-
-# If logged into the school's flip servers
+# Logged into the school's flip servers
 pip3 install --user virtualenv
 ```
 
 We then want to run the command
 
 ```bash
-# Linux and Mac
 python3 -m venv ./venv
 
-# Windows Command Prompt
-python -m venv venv
 ```
 
-This will create a virtual environment in your project root. It will be in the folder `venv` located in the project root. I *strongly* recommend adding `/venv` to your `.gitignore` file. This will save a lot of headaches down the road. When you migrate your project to your flip, you'll create a new virtual environment there. If you want to package your project up for Heroku, doing this now will save you work down the road.
+This will create a virtual environment in your project root. It will be in the folder `venv` located in the project root. I *strongly* recommend adding `/venv` to your `.gitignore` file. This could save a lot of headaches down the road.
 
 To activate the virtual environment (and we need to do this everytime we close out of the terminal or log off the computer):
 
 ```bash
-# Linux and Mac
 source ./venv/bin/activate
-
-# Windows Command Prompt
-/venv/Scripts/activate.bat
 ```
 
 If you want to verify if your virtual environment is currently active
 
 ```bash
-# Linux and Mac
 which python3
 # <path_to_your_repo_folder>/venv/bin/python3
-
-# Windows Command Prompt
-where python
 ```
 
 If `which` outputs something like `usr/bin/python3`, you did something wrong. Go back through the steps and verify.
@@ -383,14 +353,6 @@ Always remember to have your virtual environment running when working on your pr
 ## Install Flask and its Dependencies
 
 This one is pretty straight forward. In your terminal, make sure your virtual environment is active if you have one, and run the following command
-```bash
-brew install mysql
-```
-
-```bash
-pip3 install flask-mysqldb
-```
-
 ```bash
 pip3 install flask-mysqldb
 ```
@@ -639,44 +601,10 @@ We have data from our `app.py` presented in our browser screen! That's pretty mu
 
 # Step 5 - Connecting the Database
 
-You remembered your MySQL password? Right? We will need it.
-
-## Starting the Database
-
-Every installation is going to be different on your local machine. This step may not be necessary but everyone will be different and helps knowing how to do this.
-
-> You will not have to do this on OSUs servers, and it won't work anyway.
-
-**Windows**
-
-1. Open a 'run' window using `Windows Key + R`
-2. Enter `services.msc`
-3. Find the item called `MySQL`
-4. Click `start`
-
-You can set this to automatically run if you want.
-
-**OSX**
-
-1. Open `Settings`
-2. Click `MySQL`
-3. Click `Start MySQL Server`
-
-**Linux**
-
-From the terminal run
-
-```bash
-service mysql start
-# You may need to add sudo to this command if you are using WSL2
-# You will *NOT* need sudo if you are on the school's flip server, it wont work anyway.
-```
 
 ## Accessing the Database
 
 The database can be accessed a variety of ways: 
-- MySQL Workbench which comes directly from Oracle themselves
-- DataGrip by JetBrains (which is free while you are a student)
 - PHPMyAdmin which is a web-interface that the school provides us with to access the MySQL database on the school's servers (so it won't work on your local machine).
 - Good ol' command line via the `mysql` command
 There may be others that I haven't mentioned. This guide will use the command line, but it should be easy enough to follow along if you are using one of the other GUI clients.
