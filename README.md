@@ -429,12 +429,11 @@ python3 app.py
 
 # app.py will be whatever you named your .py file if it wasn't 'app'
 ```
-
 And you should see some output:
 
 ![Running the app for the first time](./doc_img/running_the_app_first_time.png)
 
-I should now be able to go into my browser, and enter that web address.
+I should now be able to use Port Forwarding in VS Code and go into my browser, and enter that web address. 
 
 ![Running the app for the first time in the browser](./doc_img/running_the_app_first_time_browser.png)
 
@@ -446,6 +445,8 @@ At this point, Flask is working, and our computer can see its output.
 >app.run(port=port, debug=True)
 >```
 >This will force the server to reload whenever changes are made to your project, so that way you don't have to manually kill the process and restart it every time.
+
+**Note:** if you are not able to browse to your app at this point because the Port Forwarding to your local PC is not set up, and already verified VPN is working then see the [gunicorn](#gunicorn) section below which explains how to use this instead. You'll need gunicorn to keep your app running after you logout anyway. 
 
 # Step 4 - Templates
 
