@@ -71,7 +71,7 @@ You can clone this repo as is, and it will run, so long as you have loaded the d
 - [Conclusion](#conclusion)
 - [Extra Bits](#extra-bits)
   - [Gunicorn](#gunicorn)
-  - [Migrating a Project Developed Locally to OSU for Deployment](#migrating-a-project-developed-locally-to-osu-for-deployment)
+  - [Collaborating with others on OSU servers](#migrating-a-project-developed-locally-to-osu-for-deployment)
     - [Requirements.txt](#requirementstxt)
     - [Getting a Dump of your Local Database](#getting-a-dump-of-your-local-database)
     - [Ensure Your Project is Pushed to GitHub](#ensure-your-project-is-pushed-to-github)
@@ -1000,9 +1000,9 @@ Once you `kill` the process will shut down and the web server is no longer runni
 
 >When logged into OSU's servers, you might get a very long list of processes, you will have to scroll through and find the very first process number or `PID` of `gunicorn` under your username.
 
-## Migrating a Project Developed Locally to OSU for Deployment
+## Collaborating with others on OSU servers
 
-This sounds like it would be very complicated but it truly isn't. In just a few steps, you can take a project you developed on your local macine and migrate it over to OSUs server with extreme ease. We just need to do it in a few steps.
+This sounds like it would be very complicated but it truly isn't. In just a few steps, your project partner can get any code you developed and migrate it over to thier account on OSUs server with extreme ease. We just need to do it in a few steps.
 
 ### Requirements.txt
 We need to generate a file to basically keep track of all the dependencies Python needs to operate and run our webserver. Fortunately `pip3` makes this very simple. Open up your terminal in the root of your project and enter
@@ -1020,18 +1020,19 @@ In essence, `requirements.txt` is *basically* the equivalent of `package.json` i
 
 We need to get all that data from our local server over to the OSU server. Perhaps we setup a ton of entities, attributes and relationships but we don't want to reconstruct it by hand, obviously. Fortunately, MySQL provides a tool that makes this abundantly easy. 
 
-On your **LOCAL** machine (not in the shell with OSU - you might need to open a second terminal), navigate to your projects `/database` folder we setup.
+Navigate to your projects `/database` folder we setup.
 
 Enter the following command in your terminal
 
 ```bash
-mysqldump -u root -p bsg > from_local.sql
+mysqldump -u cs340_onid -h classmysql.engr.oregonstate.edu -p cs340_onid > backup.sql
+
+# Example
+mysqldump -u cs340_lastnamef -h classmysql.engr.oregonstate.edu -p cs340_lastnamef > backup.sql
 ```
 
-- `mysqldump` is just the name of the utility, this stays the same
-- `root` is your username for mysql on your **LOCAL** machine, if you used something different, change this
-- `bsg` is the name of the database, if you called it something different change this
-- `from_local.sql` is the name of the output SQL file. You can make this whatever you would like, just keep the extension for ease of identification
+- `mysqldump` is just the name of the utility
+- `backup.sql` is the name of the output SQL file. You can make this whatever you would like, just keep the extension for ease of identification
 
 ### Ensure Your Project is Pushed to GitHub
 
@@ -1059,9 +1060,11 @@ We can follow that up with another `git status` command to verify we are 'up to 
 
 Once we are 'up to date' we can move on
 
-### Cloning Your Repository on OSU
+### Cloning a Repository 
 
-Go ahead, establish an SSH session with any flip. Some people use username/password authentication, others have setup SSH keys, doesn't matter. Once, you have established a shell with `flipX`, we can migrate. 
+Add your project partner as a collaborator to your repo. Then have them folow these steps:
+
+Establish an SSH session with any flip. Some people use username/password authentication, others have setup SSH keys, doesn't matter. Once, you have established a shell with `flipX`, we can migrate. 
 
 > It's very important that you stay consistent in your use of the `flip` you are on. i.e. If you login with `flip2` and serve your app, then that will be the flip your app is accessible from. (Serving your app on `flip2` means you can't access it on `flip1` or `flip3`)
 
@@ -1072,7 +1075,7 @@ cd ~
 ```
 This will place you in your home folder.
 
-We now can clone our repository. Enter the following command
+We now can clone the repository. Enter the following command
 ```bash
 git clone <full_path_to_your_git_repo_here>
 
@@ -1103,12 +1106,12 @@ That's it, all the necessary dependecies are now installed.
 
 ### Populating your OSU Database
 
-Remember that file we created in `/database` called `from_local.sql`? We're going to need that. Let's navigate to our `/database` folder on the **REMOTE OSU** machine (i.e. "The FLIP").
+Remember that file we created in `/database` called `backup.sql`? We're going to need that. Let's navigate to our `/database` folder on the **OSU** server (i.e. "The FLIP").
 
 We need to get access to the database command line for the school, we do this as such
 
 ```bash
-mysql -u cs340_kocherag -p0000 -h classmysql.engr.oregonstate.edu
+mysql -u cs340_username -p0000 -h classmysql.engr.oregonstate.edu
 ```
 - `cs340_kocherag` : Replace with your **Database** username, not your ONID Username only
 - `0000` : **! VERY IMPORTANT !** This is where your password goes, by default its the last 4 digits of your ONID. Notice there is no space between `-p` and `0000`, this is important and not a typo.
@@ -1143,7 +1146,7 @@ use cs340_kocherag;
 Lastly, we enter the command
 
 ```SQL
-source from_local.sql;
+source backup.sql;
 ```
 
 At this point, you will see a bunch of stuff, indicating the dump file we created is being loaded into the OSU database, it should be a very quick process. 
@@ -1185,14 +1188,6 @@ Comment out the `host`, `user`, `passwd` and `db` that we set up for local envir
 > To edit text in `vim` press the `i` key. This puts you in insert mode. You can use the arrow keys to navigate around and move your cursor up and down to make changes. When you are done making changes press the `<ESC>` key and type `:wq`. This will save the changes and close the file.
 
 ```python
-# For Local Devlelopment
-# host = 'localhost'
-# user = 'root'                                   # can be different if you set up another username in your MySQL installation
-# passwd = ''
-# db = 'bsg'
-
-
-# For OSU Flip Servers
 
 host = 'classmysql.engr.oregonstate.edu'      # MUST BE THIS
 user = '<your_osu_db_user_name>'       # don't forget the CS_340 prefix
@@ -1202,9 +1197,9 @@ db = '<your_osu_db_name>'
 
 Once are credentials are updated, we can now deploy our migrated project
 
-### Deploying the Migrated Project on OSUs Flip Server
+### Running the app
 
-Navigate back to the root of your project on the OSU server and run Gunicorn
+Navigate back to the root of your project and run Gunicorn
 
 ```bash
 gunicorn --bind 0.0.0.0:<your_port_choice_here> wsgi:app
@@ -1212,7 +1207,7 @@ gunicorn --bind 0.0.0.0:<your_port_choice_here> wsgi:app
 # Remember to add the -D switch if you want gunicorn to run persistently even after you log off
 ```
 
-> If you get an error here, its alomst certainly either your credenital file has the incorrect credentials or someone is already using that port number on the flip. Verify your credentials are correct and then try a different port number. Valid port numbers are higher than 1023 and up to 65535. Avoid ports with repeating or incrementing digits like 2222 or 5678. Students usually choose these because they're *easy* to remember.
+> If you get an error here, its almost certainly either your credenital file has the incorrect credentials or someone is already using that port number on the flip. Verify your credentials are correct and then try a different port number. Valid port numbers are higher than 1023 and up to 65535. Avoid ports with repeating or incrementing digits like 2222 or 5678. Students usually choose these because they're *easy* to remember.
 
 ![Terminal on OSU running gunicorn command](doc_img/app_on_flip_terminal.png)
 
