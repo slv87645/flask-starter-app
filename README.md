@@ -195,7 +195,7 @@ if __name__ == "__main__":
 
 [//]: # " CREATE TABLE diagnostic(id INT PRIMARY KEY, text VARCHAR(255) NOT NULL); "
 
-[//]: # ( INSERT INTO diagnostic (text) VALUES ("MySQL is working"); )
+[//]: # " INSERT INTO diagnostic (text) VALUES (\"MySQL is working\"); "
 
 [//]: # " SELECT * FROM diagnostic; "
 
