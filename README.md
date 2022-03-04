@@ -222,7 +222,7 @@ if __name__ == "__main__":
 
 ![step15 command](./doc_img_step0/step15.png)
 
-[//]: # " 16) Should you need to restart the web app after making changes, run \"pkill -u yourOSUAccountName gunicorn\" replacing yourOSUid and restart by running the command in step 14). Note that the pkill command will kill all of your flip gunicorn processes.
+[//]: # " 16) Should you need to restart the web app after making changes, run \"pkill -u yourOSUAccountName gunicorn\" replacing yourOSUid and restart by running the command in step 14). Note that the pkill command will kill all of your flip gunicorn processes. "
 
 14) Should you need to restart the web app after making changes, run "pkill -u yourOSUAccountName gunicorn" replacing yourOSUid (i.e. for me it would be kamanda) and restart by running the command in step 14). Note that the pkill command will kill all of your flip gunicorn processes. 
 
