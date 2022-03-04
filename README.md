@@ -181,7 +181,8 @@ if __name__ == "__main__":
 
 ![step10 command](./doc_img_step0/step10.png)
 
-[//]: # "Comment" ## Filling your Database
+[//]: # " ## Filling your Database 
+"
 
 [//]: # "Comment" 11) (Ignore this step if you already completed the query portion of task 1) If you haven't done so already, pivot for a moment and log in to your school provided database via phpmyadmin (https://classmysql.engr.oregonstate.edu/index.php). Note that you can also accomplish the above steps 11-12 via the terminal or the webapp itself if you desire, but I find it's good practice to familiarize yourself with the phpmyadmin UI early, it's a great tool!
 [//]: # "Comment"
