@@ -152,8 +152,15 @@ mysql = MySQL(app)
 @app.route('/')
 def root():
     query = "SELECT * FROM diagnostic;"
+    query1 = 'DROP TABLE IF EXISTS diagnostic;';
+    query2 = 'CREATE TABLE diagnostic(id INT PRIMARY KEY AUTO_INCREMENT, text VARCHAR(255) NOT NULL);';
+    query3 = 'INSERT INTO diagnostic (text) VALUES ("MySQL is working!")';
+    query4 = 'SELECT * FROM diagnostic;';
     cur = mysql.connection.cursor()
-    cur.execute(query)
+    cur.execute(query1)
+    cur.execute(query2)
+    cur.execute(query3)
+    cur.execute(query4)
     results = cur.fetchall()
 
     return results[0]
@@ -174,41 +181,50 @@ if __name__ == "__main__":
 
 ![step10 command](./doc_img_step0/step10.png)
 
-## Filling your Database
+[//]: # "Comment" ## Filling your Database
 
-11) (Ignore this step if you already completed the query portion of task 1) If you haven't done so already, pivot for a moment and log in to your school provided database via phpmyadmin (https://classmysql.engr.oregonstate.edu/index.php). Note that you can also accomplish the above steps 11-12 via the terminal or the webapp itself if you desire, but I find it's good practice to familiarize yourself with the phpmyadmin UI early, it's a great tool!
+[//]: # "Comment" 11) (Ignore this step if you already completed the query portion of task 1) If you haven't done so already, pivot for a moment and log in to your school provided database via phpmyadmin (https://classmysql.engr.oregonstate.edu/index.php). Note that you can also accomplish the above steps 11-12 via the terminal or the webapp itself if you desire, but I find it's good practice to familiarize yourself with the phpmyadmin UI early, it's a great tool!
+[//]: # "Comment"
+[//]: # "Comment" ![step11 command](./doc_img_step0/step11.png)
+[//]: # "Comment"
+[//]: # "Comment" 12) (Ignore this step if you already completed the query portion of task 1) Execute the queries below in the SQL tab of phpmyadmin after importing the bsg_db.sql file in order to create a diagnostic table (as outlined in the module linked in step 10). These are the 4 lines of code, input them in the SQL tab and hit ‘Go’ (see screenshot below):
+[//]: # "Comment" ```
+[//]: # "Comment" DROP TABLE IF EXISTS diagnostic;
+[//]: # "Comment" CREATE TABLE diagnostic(id INT PRIMARY KEY, text VARCHAR(255) NOT NULL);
+[//]: # "Comment" INSERT INTO diagnostic (text) VALUES ("MySQL is working");
+[//]: # "Comment" SELECT * FROM diagnostic;
+[//]: # "Comment" ```
 
-![step11 command](./doc_img_step0/step11.png)
-
-12) (Ignore this step if you already completed the query portion of task 1) Execute the queries below in the SQL tab of phpmyadmin after importing the bsg_db.sql file in order to create a diagnostic table (as outlined in the module linked in step 10). These are the 4 lines of code, input them in the SQL tab and hit ‘Go’ (see screenshot below):
-```
-DROP TABLE IF EXISTS diagnostic;
-CREATE TABLE diagnostic(id INT PRIMARY KEY, text VARCHAR(255) NOT NULL);
-INSERT INTO diagnostic (text) VALUES ("MySQL is working");
-SELECT * FROM diagnostic;
-```
-
-![step12 command](./doc_img_step0/step12.png)
+[//]: # "Comment" ![step12 command](./doc_img_step0/step12.png)
 
 ## Hosting on Flip Servers and Running Forever via Gunicorn
 
-13) Ok, back to app.py and VScode. Run "pip3 install gunicorn" via the Terminal.
+[//]: # "Comment" 13) Ok, back to app.py and VScode. Run "pip3 install gunicorn" via the Terminal.
 
+11) Ok, back to app.py and VScode. Run "pip3 install gunicorn" via the Terminal.
 ![step13 command](./doc_img_step0/step13.png)
 
-14) Run "gunicorn -b 0.0.0.0:XXXXX -D app:app" replacing 'XXXXX' with your desired port number.
+[//]: # "Comment" 14) 
+
+12) Run "gunicorn -b 0.0.0.0:XXXXX -D app:app" replacing 'XXXXX' with your desired port number.
 
 ![step14 command](./doc_img_step0/step14.png)
 
-15) Navigate to your web app address, i.e. http://flipX.engr.oregonstate.edu:XXXXX/ with the first 'X' being your flip server (1-3), and XXXXX being your port number.
+[//]: # "Comment" 15) Navigate to your web app address, i.e. http://flipX.engr.oregonstate.edu:XXXXX/ with the first 'X' being your flip server (1-3), and XXXXX being your port number.
+
+13) Navigate to your web app address, i.e. http://flipX.engr.oregonstate.edu:XXXXX/ with the first 'X' being your flip server (1-3), and XXXXX being your port number.
 
 ![step15 command](./doc_img_step0/step15.png)
 
-16) Should you need to restart the web app after making changes, run "pkill -u yourOSUAccountName gunicorn" replacing yourOSUid (i.e. for me it would be kamanda) and restart by running the command in step 14). Note that the pkill command will kill all of your flip gunicorn processes.
+[//]: # "Comment" 16) Should you need to restart the web app after making changes, run "pkill -u yourOSUAccountName gunicorn" replacing yourOSUid (i.e. for me it would be kamanda) and restart by running the command in step 14). Note that the pkill command will kill all of your flip gunicorn processes.
+
+14) Should you need to restart the web app after making changes, run "pkill -u yourOSUAccountName gunicorn" replacing yourOSUid (i.e. for me it would be kamanda) and restart by running the command in step 14). Note that the pkill command will kill all of your flip gunicorn processes.
 
 ![step16 command](./doc_img_step0/step16.png)
 
-17) Hopefully that was easy to understand and that you now have a basic functioning flask webapp. Feel free to tinker around now and add templating and the like (there is a section on templating and other good notes further into the guide)! Again, I can’t stress this enough – if you want further context and detail, please do read on through the main body of the flask guide. It's well articulated with the reasoning behind many of these steps, written by the wonderful TA Greg Kochera for past terms! This section is just a fast track to kickstarting a basic app as students in the past have gotten lost or had issues with some of the greater detail in the rest of the guide, but it definitely still contains valuable information.
+[//]: # "Comment" 17) Hopefully that was easy to understand and that you now have a basic functioning flask webapp. Feel free to tinker around now and add templating and the like (there is a section on templating and other good notes further into the guide)! Again, I can’t stress this enough – if you want further context and detail, please do read on through the main body of the flask guide. It's well articulated with the reasoning behind many of these steps, written by the wonderful TA Greg Kochera for past terms! This section is just a fast track to kickstarting a basic app as students in the past have gotten lost or had issues with some of the greater detail in the rest of the guide, but it definitely still contains valuable information.
+
+15) Hopefully that was easy to understand and that you now have a basic functioning flask webapp. Feel free to tinker around now and add templating and the like (there is a section on templating and other good notes further into the guide)! Again, I can’t stress this enough – if you want further context and detail, please do read on through the main body of the flask guide. It's well articulated with the reasoning behind many of these steps, written by the wonderful TA Greg Kochera for past terms! This section is just a fast track to kickstarting a basic app as students in the past have gotten lost or had issues with some of the greater detail in the rest of the guide, but it definitely still contains valuable information.
 
 # Step 1 - Get The Tools Downloaded You Will Need
 
