@@ -195,7 +195,7 @@ if __name__ == "__main__":
 
 [//]: # " CREATE TABLE diagnostic(id INT PRIMARY KEY, text VARCHAR(255) NOT NULL); "
 
-[//]: # " INSERT INTO diagnostic (text) VALUES ("MySQL is working"); "
+[//]: # ( INSERT INTO diagnostic (text) VALUES ("MySQL is working"); )
 
 [//]: # " SELECT * FROM diagnostic; "
 
@@ -205,12 +205,12 @@ if __name__ == "__main__":
 
 ## Hosting on Flip Servers and Running Forever via Gunicorn
 
-[//]: # " 13) Ok, back to app.py and VScode. Run "pip3 install gunicorn" via the Terminal. "
+[//]: # ( 13) Ok, back to app.py and VScode. Run "pip3 install gunicorn" via the Terminal. )
 
 11) Ok, back to app.py and VScode. Run "pip3 install gunicorn" via the Terminal.
 ![step13 command](./doc_img_step0/step13.png)
 
-[//]: # " 14) Run "gunicorn -b 0.0.0.0:XXXXX -D app:app" replacing 'XXXXX' with your desired port number. "
+[//]: # ( 14) Run "gunicorn -b 0.0.0.0:XXXXX -D app:app" replacing 'XXXXX' with your desired port number. )
 
 12) Run "gunicorn -b 0.0.0.0:XXXXX -D app:app" replacing 'XXXXX' with your desired port number.
 
@@ -222,7 +222,7 @@ if __name__ == "__main__":
 
 ![step15 command](./doc_img_step0/step15.png)
 
-[//]: # " 16) Should you need to restart the web app after making changes, run "pkill -u yourOSUAccountName gunicorn" replacing yourOSUid (i.e. for me it would be kamanda) and restart by running the command in step 14). Note that the pkill command will kill all of your flip gunicorn processes. "
+[//]: # ( 16) Should you need to restart the web app after making changes, run "pkill -u yourOSUAccountName gunicorn" replacing yourOSUid and restart by running the command in step 14). Note that the pkill command will kill all of your flip gunicorn processes. )
 
 14) Should you need to restart the web app after making changes, run "pkill -u yourOSUAccountName gunicorn" replacing yourOSUid (i.e. for me it would be kamanda) and restart by running the command in step 14). Note that the pkill command will kill all of your flip gunicorn processes. 
 
