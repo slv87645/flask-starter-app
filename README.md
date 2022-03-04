@@ -188,11 +188,17 @@ if __name__ == "__main__":
 [//]: # " ![step11 command](./doc_img_step0/step11.png) "
 
 [//]: # " 12) (Ignore this step if you already completed the query portion of task 1) Execute the queries below in the SQL tab of phpmyadmin after importing the bsg_db.sql file in order to create a diagnostic table (as outlined in the module linked in step 10). These are the 4 lines of code, input them in the SQL tab and hit ‘Go’ (see screenshot below): "
+
 [//]: # " ``` "
+
 [//]: # " DROP TABLE IF EXISTS diagnostic; "
+
 [//]: # " CREATE TABLE diagnostic(id INT PRIMARY KEY, text VARCHAR(255) NOT NULL); "
+
 [//]: # " INSERT INTO diagnostic (text) VALUES ("MySQL is working"); "
+
 [//]: # " SELECT * FROM diagnostic; "
+
 [//]: # " ``` "
 
 [//]: # " ![step12 command](./doc_img_step0/step12.png) "
