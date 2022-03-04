@@ -170,7 +170,7 @@ if __name__ == "__main__":
 
 ![step9 command](./doc_img_step0/step9.png)
 
-10) Change the port at the bottom to any port of your choosing (some ports might be taken, just choose a large number but not too large, there is a ceiling number on the flip servers)
+10) Change the port at the bottom to any port of your choosing (some ports might be taken, just choose a large number but not too large, there is a ceiling number on the flip servers). Generally, any number within 1024 < PORT < 65535 is acceptable. PORT < 1024 are privileged. Avoid numbers like 1234 (incremental increases), or 2222 (repeating) as students often prefer these easier numbers to type in and are often already in use.
 
 ![step10 command](./doc_img_step0/step10.png)
 
