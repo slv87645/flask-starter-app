@@ -163,7 +163,7 @@ def root():
     cur.execute(query4)
     results = cur.fetchall()
 
-    return results[0]
+    return "<h1>MySQL Results" + str(results[0])
 
 
 # Listener
