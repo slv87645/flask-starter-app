@@ -110,7 +110,7 @@ But without further ado, here's the quick and dirty start-up:
 
 ![step3 command](./doc_img_step0/step3.png)
 
-4) Run "python3 -m venv ." (the period . is part of the command, don’t forget it!).
+4) Run "python3 -m venv ./venv" (the period . is part of the command, don’t forget it!).
 
 ![step4 command](./doc_img_step0/step4.png)
 
