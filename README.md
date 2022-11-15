@@ -114,7 +114,7 @@ But without further ado, here's the quick and dirty start-up:
 
 ![step4 command](./doc_img_step0/step4.png)
 
-5) Run "source ./bin/activate", afterwards you should see (yourfoldername) flipX in the terminal which means we are successfully in the virtual environment.
+5) Run "source venv/bin/activate", afterwards you should see (yourfoldername) flipX in the terminal which means we are successfully in the virtual environment.
 
 ![step5 command](./doc_img_step0/step5.png)
 
