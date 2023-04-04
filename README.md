@@ -635,7 +635,10 @@ There may be others that I haven't mentioned. This guide will use the command li
 Let's get connected to the database, open your terminal and enter
 
 ```bash
-mysql -u root -p
+# login to MySQL on flip servers
+# username is usually cs340_ONIDusername
+# password is usually last 4 of student ID
+mysql -u cs340_username -h classmysql.engr.oregonstate.edu -p cs340_username 
 ```
 You will be prompted for a password. Enter your password and if all went well you will be greeted with a console in MySQL.
 
