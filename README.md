@@ -941,6 +941,8 @@ For our href link tied to each delete button, we purposely set each link to rout
 
 So as you can see at the top, our delete button link matches our app delete route. Our delete_people function just below is passed that ‘id’ variable directly from the route. We utilize a DELETE query, and we want to delete from bsg_people the person with the associated id. After executing our query, similar to our past code blocks, we route back to /people. Note that we never render a template akin to our /people route. We simply redirect back to /people. So while the /delete_people route exists, it never actually loads a page to display to the user, it all executes behind the scenes when the user clicks 'delete' and then immediately redirects them back to /people. 
 
+Note, remember to include the comma following the id variable in the query execute statement for the delete function on line 106. Without this comma you will receive an error.
+
 You should be picking up the overall pattern here after two functionalities. Create route, set method (if applicable), grab form inputs (if applicable), create desired query, execute desired query, load page.
 
 ## Update/Edit
