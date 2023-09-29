@@ -163,7 +163,7 @@ def root():
     cur.execute(query4)
     results = cur.fetchall()
 
-    return "<h1>MySQL Results" + str(results[0])
+    return "<h1>MySQL Results</h1>" + str(results[0])
 
 
 # Listener
@@ -675,8 +675,6 @@ In that folder, I have placed two files; `bsg-db.sql` and `bsg-DML.sql`. We will
 Navigate to your `database` folder in terminal, then open up MySQL. We need to create a database to store the data in, use the database (make it the active one) and then load data into it from our file.
 
 ```SQL
-CREATE DATABASE bsg;
-USE DATABASE bsg;
 source bsg_db.sql
 ```
 
