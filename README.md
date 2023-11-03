@@ -672,7 +672,7 @@ In that folder, I have placed two files; `bsg-db.sql` and `bsg-DML.sql`. We will
      └ bsg_DML.sql
 ```
 
-Navigate to your `database` folder in terminal, then open up MySQL. We need to create a database to store the data in, use the database (make it the active one) and then load data into it from our file.
+Navigate to your `database` folder in terminal, then open up MySQL. If you are working locally on your on PC and have a copy of MySQL then you will need to create a database to store the data in, use the database (make it the active one) and then load data into it from our file. If you are working on the COE MySQL on flip servers, then you  do not need to create a new database to follow this tutorial - just use your assigned student database. To be more specific, please ignore the "CREATE DATABASE bsg;" and "USE bsg;" commands shown in the screenshot.
 
 ```SQL
 source bsg_db.sql
